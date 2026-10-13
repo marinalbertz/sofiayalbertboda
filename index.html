@@ -51,17 +51,7 @@ const CONFIG = {
   confirmarAntesDe: "15 de diciembre de 2026",   // confirmar fecha límite
 
   // URL del script de Google (paso 3 de la guía). Vacío = modo prueba.
-  scriptUrl: "https://script.google.com/macros/s/AKfycbyjhXXYhiCWl4gVgP7LOHMMdJRs9Vnbb64nEf_xCSKmX4XhkRNSkr56L70-imWNWUemlQ/exec",
-
-  // Si alguien entra sin código personal, cuántos lugares puede confirmar como máximo
-  pasesSinCodigo: 2,
-
-  /* INVITADOS — cada uno recibe su link:  https://TUUSUARIO.github.io/boda/?i=CODIGO
-     Usa códigos difíciles de adivinar (letras y números).                        */
-  invitados: {
-    "demo4k": { nombre: "Familia Ejemplo", pases: 4 },
-    "ana7x2": { nombre: "Ana López",       pases: 1 }
-  }
+  scriptUrl: "https://script.google.com/macros/s/AKfycbyjhXXYhiCWl4gVgP7LOHMMdJRs9Vnbb64nEf_xCSKmX4XhkRNSkr56L70-imWNWUemlQ/exec"
 };
 </script>
 
@@ -198,14 +188,6 @@ em,.italica{font-style:italic}
 }
 .foto-cita{width:calc(100% + 60px);max-width:none;margin:-40px -30px 10px}
 .foto .pie{position:absolute;left:0;right:0;bottom:9%;text-align:center;font-family:"Pinyon Script",cursive;font-size:38px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.6)}
-
-/* ================= PASE ================= */
-#pase{background:var(--olivo);color:var(--crema);padding:54px 30px}
-#pase .etiqueta{color:var(--salvia-cl)}
-#pase .para{font-family:"Pinyon Script",cursive;font-size:42px;line-height:1.15;margin:10px 0 18px;color:#fff}
-.pases-num{display:inline-flex;align-items:center;gap:14px;border:1px solid var(--oro-cl);padding:10px 26px;border-radius:2px}
-.pases-num b{font-family:"Italiana",serif;font-size:40px;font-weight:400;color:var(--oro-cl);line-height:1}
-.pases-num span{font-size:14px;letter-spacing:.25em;text-transform:uppercase}
 
 /* ================= CUENTA REGRESIVA ================= */
 #cuenta{background:var(--salvia-cl)}
@@ -428,13 +410,6 @@ form .btn{width:100%;margin-top:6px}
     <img src="fotos/baile.jpg" alt="Sofía y Albert bailando" width="1000" height="1500">
   </section>
 
-  <!-- PASE PERSONAL -->
-  <section id="pase" class="oculto">
-    <p class="etiqueta revelar">Esta invitación es para</p>
-    <p class="para revelar" id="paseNombre"></p>
-    <div class="pases-num revelar"><b id="paseNum">2</b><span id="paseTxt">Pases</span></div>
-  </section>
-
   <!-- CUENTA REGRESIVA -->
   <section id="cuenta">
     <p class="etiqueta revelar">Solo faltan</p>
@@ -612,22 +587,9 @@ form .btn{width:100%;margin-top:6px}
       <div><div class="hora">${it.hora}</div><div class="que">${it.titulo}</div></div>
     </div>`).join("");
 
-  // ---------- pase personalizado ----------
-  const codigo = (new URLSearchParams(location.search).get("i") || "").trim();
-  const inv = C.invitados[codigo];
-  const maxPases = inv ? inv.pases : C.pasesSinCodigo;
-  if (inv){
-    $("#pase").classList.remove("oculto");
-    $("#paseNombre").textContent = inv.nombre;
-    $("#paseNum").textContent = inv.pases;
-    $("#paseTxt").textContent = inv.pases === 1 ? "Pase" : "Pases";
-    $("#fNombre").value = inv.nombre;
-  }
-
   // ---------- detalles ----------
   const det = [];
   det.push(["i-vestido","Código de vestimenta", C.vestimenta + (C.vestimentaNota ? `<br>${C.vestimentaNota}` : "")]);
-  if (inv) det.push(["i-familia","Pases", `Hemos reservado <b>${inv.pases}</b> ${inv.pases===1?"lugar":"lugares"} para ti. ¡Gracias por entender!`]);
   if (C.soloAdultos) det.push(["i-nino","Solo adultos","Con todo cariño, nuestro evento será solo para adultos."]);
   det.push(["i-check","Confirmación", `Por favor confírmanos antes del ${C.confirmarAntesDe}.`]);
   $("#listaDetalles").innerHTML = det.map(([ic,t,d]) => `
@@ -650,11 +612,8 @@ form .btn{width:100%;margin-top:6px}
     err.classList.add("oculto");
     const asiste = $("#aSi").checked ? "Sí" : "No";
     const datos = {
-      codigo: codigo || "(sin código)",
-      invitado: inv ? inv.nombre : "",
-      pasesAsignados: maxPases,
+      codigo: "", invitado: "", pasesAsignados: "", personas: "",
       nombre, asiste,
-      personas: asiste === "Sí" ? maxPases : 0,
       mensaje: $("#fMensaje").value.trim()
     };
     const btn = $("#btnEnviar");
@@ -669,9 +628,9 @@ form .btn{width:100%;margin-top:6px}
       $("#formRsvp").classList.add("oculto");
       $("#graciasRsvp").classList.remove("oculto");
       $("#graciasTexto").textContent = asiste === "Sí"
-        ? `Recibimos tu confirmación${inv ? ` para ${inv.pases} ${inv.pases===1?"persona":"personas"}` : ""}. ¡Nos vemos el ${dia} de ${MESES[mes-1].toLowerCase()}!`
+        ? `Recibimos tu confirmación. ¡Nos vemos el ${dia} de ${MESES[mes-1].toLowerCase()}!`
         : "Lamentamos que no puedas acompañarnos. Gracias por avisarnos, te llevamos en el corazón.";
-      try{ localStorage.setItem("rsvp-"+codigo, JSON.stringify(datos)); }catch(_){}
+      try{ localStorage.setItem("rsvp", JSON.stringify(datos)); }catch(_){}
     } catch(_){
       err.textContent = "No pudimos enviar tu respuesta. Revisa tu conexión e inténtalo de nuevo.";
       err.classList.remove("oculto");
