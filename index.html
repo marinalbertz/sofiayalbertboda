@@ -49,7 +49,7 @@ const CONFIG = {
   // Fotos: súbelas a la carpeta /fotos del repo y pon aquí sus nombres
   galeria: [],                         // ej. ["fotos/1.jpg","fotos/2.jpg"]
 
-  confirmarAntesDe: "15 de noviembre de 2026",   // confirmar fecha límite
+  confirmarAntesDe: "1 de diciembre de 2026",   // confirmar fecha límite
 
   // URL del script de Google (paso 3 de la guía). Vacío = modo prueba.
   scriptUrl: "https://script.google.com/macros/s/AKfycbyjhXXYhiCWl4gVgP7LOHMMdJRs9Vnbb64nEf_xCSKmX4XhkRNSkr56L70-imWNWUemlQ/exec"
@@ -257,6 +257,24 @@ em,.italica{font-style:italic}
 .galeria img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:4px}
 .galeria img:nth-child(3n+1){grid-column:span 2;aspect-ratio:4/3}
 
+/* ================= AVISO REGALOS ================= */
+.aviso-regalos{
+  display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;
+  background:var(--olivo);color:var(--crema);padding:13px 18px;position:relative;z-index:5;
+  border-bottom:1px solid var(--oro-cl);font-size:17px;line-height:1.25;text-align:left;
+}
+.aviso-regalos svg{width:28px;height:28px;flex:none;color:var(--oro-cl)}
+.aviso-regalos b{font-weight:600;letter-spacing:.02em}
+.aviso-regalos .ver{flex:none;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--oro-cl);border:1px solid var(--oro-cl);border-radius:30px;padding:6px 12px;white-space:nowrap}
+.aviso-regalos:active{background:var(--olivo-osc)}
+
+/* ================= MESA DE REGALOS ================= */
+#regalos .icono-regalo{width:46px;height:46px;margin:0 auto 6px;color:var(--oro)}
+.tiendas{display:grid;gap:16px;margin-top:26px}
+.tienda{background:var(--papel);border:1px solid var(--oro-cl);outline:1px solid rgba(184,149,90,.25);outline-offset:-7px;border-radius:8px;padding:26px 20px;box-shadow:var(--sombra)}
+.tienda .nombre-tienda{font-family:"Italiana",serif;font-size:30px;letter-spacing:.08em;color:var(--olivo)}
+.tienda .det{font-size:16px;color:var(--tinta-suave);margin:2px 0 14px}
+
 /* ================= RSVP ================= */
 #rsvp{background:var(--olivo);color:var(--crema)}
 #rsvp .titulo-script{color:#fff}
@@ -430,6 +448,13 @@ form .btn{width:100%;margin-top:6px}
 </div>
 
 <main>
+  <!-- AVISO MESA DE REGALOS -->
+  <a class="aviso-regalos" href="#regalos">
+    <svg><use href="#i-regalo"/></svg>
+    <span><b>¡Ya está abierta nuestra mesa de regalos!</b></span>
+    <span class="ver">Ver</span>
+  </a>
+
   <!-- PORTADA -->
   <section id="portada" class="papel">
     <div class="marco"><svg class="c1"><use href="#esquina-oro"/></svg><svg class="c2"><use href="#esquina-oro"/></svg><svg class="c3"><use href="#esquina-oro"/></svg><svg class="c4"><use href="#esquina-oro"/></svg></div>
@@ -520,6 +545,26 @@ form .btn{width:100%;margin-top:6px}
     <div class="galeria" id="galeria"></div>
   </section>
 
+
+  <!-- MESA DE REGALOS -->
+  <section id="regalos" class="papel">
+    <svg class="icono-regalo revelar"><use href="#i-regalo"/></svg>
+    <h2 class="titulo-script revelar">Mesa de regalos</h2>
+    <svg class="orn revelar" style="width:150px;margin-top:-2px"><use href="#orn"/></svg>
+    <p class="cuerpo revelar">Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con nosotros, preparamos nuestra mesa en:</p>
+    <div class="tiendas">
+      <div class="tienda revelar">
+        <p class="nombre-tienda">Liverpool</p>
+        <p class="det">Evento #60079991</p>
+        <a class="btn" href="https://mesaderegalos.liverpool.com.mx/milistaderegalos/60079991" target="_blank" rel="noopener"><svg><use href="#i-regalo"/></svg>Ver mesa</a>
+      </div>
+      <div class="tienda revelar">
+        <p class="nombre-tienda">Amazon</p>
+        <p class="det">Lista de boda</p>
+        <a class="btn" href="https://www.amazon.com.mx/wedding/guest-view/31OK1SPVHPDHV" target="_blank" rel="noopener"><svg><use href="#i-regalo"/></svg>Ver lista</a>
+      </div>
+    </div>
+  </section>
 
   <!-- CONFIRMACIÓN -->
   <section id="rsvp">
